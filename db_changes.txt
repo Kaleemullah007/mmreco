@@ -1,0 +1,368 @@
+// Maulik ( 10-09-2018 )
+
+ALTER TABLE `agencybanking` ADD `file_date` DATE NOT NULL AFTER `deleted_at`;
+ALTER TABLE `agencybankingfee` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardauthorisation` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardbaladjust` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardchrgbackrepres` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardevent` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardfee` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardfinancial` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `cardloadunload` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+ALTER TABLE `mastercardfee` ADD `file_date` DATE NOT NULL AFTER `updated_at`;
+
+
+CREATE TABLE IF NOT EXISTS `settlement_summary` (
+  `id` varchar(255) NOT NULL,
+  `settlement_date` date NOT NULL,
+  `opening_ac_bal` decimal(20,4) NOT NULL,
+  `scheme_to_settlement_transfer` decimal(20,4) DEFAULT NULL,
+  `charges` decimal(20,4) DEFAULT NULL,
+  `deposits_into_settlement_ac` decimal(20,4) DEFAULT NULL,
+  `monthly_interest_settlement_ac` decimal(20,4) DEFAULT NULL,
+  `no_of_pos_txn` decimal(20,4) NOT NULL,
+  `value_of_pos_txn` decimal(20,4) NOT NULL,
+  `value_of_pos_interchange` decimal(20,4) NOT NULL,
+  `total_value_of_pos_txn` decimal(20,4) NOT NULL,
+  `number_of_atm_txn` decimal(20,4) NOT NULL,
+  `value_of_atm_txn` decimal(20,4) NOT NULL,
+  `value_of_atm_interchange` decimal(20,4) NOT NULL,
+  `total_value_of_atm_txn` decimal(20,4) NOT NULL,
+  `total_value_of_txn_settled` decimal(20,4) NOT NULL,
+  `settlement_closing_bal_adj` decimal(20,4) DEFAULT NULL,
+  `closing_ac_bal` decimal(20,4) NOT NULL,
+  `scheme_closing_bal` decimal(20,4) NOT NULL,
+  `prefund` decimal(20,4) DEFAULT NULL,
+  `total_bal_available_to_cust_bal` decimal(20,4) NOT NULL,
+  `available_cust_bal_credit` decimal(20,4) NOT NULL,
+  `available_cust_bal_debit` decimal(20,4) NOT NULL,
+  `overall_cash_position` decimal(20,4) NOT NULL,
+  `live_pans` decimal(20,4) NOT NULL,
+  `transactional_fees` decimal(20,4) DEFAULT NULL,
+  `month` varchar(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `flag` enum('N','Y') NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `settlement_summary` ADD PRIMARY KEY(`id`);
+
+ALTER TABLE `bank_balance` CHANGE `bankacc` `bankacc` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE `settlement_summary` ADD `dr_cr_bank` DECIMAL(20,4) NULL AFTER `scheme_closing_bal`;
+
+
+ALTER TABLE `agencybanking` CHANGE `CashAmt_value` `CashAmt_value` DECIMAL(20,4) NOT NULL, CHANGE `Fee_value` `Fee_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `BillAmt_value` `BillAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `OrigTxnAmt_value` `OrigTxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `agencybankingfee` CHANGE `Amt_value` `Amt_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `cardauthorisation` CHANGE `TxnAmt_value` `TxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `CashbackAmt_value` `CashbackAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `BillAmt_value` `BillAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `PaddingAmt_value` `PaddingAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `CommissionAmt_value` `CommissionAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `OrigTxnAmt_value` `OrigTxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `cardbaladjust` CHANGE `Amount_value` `Amount_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `cardchrgbackrepres` CHANGE `TxnAmt_value` `TxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `CashbackAmt_value` `CashbackAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `BillAmt_value` `BillAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `SettlementAmt_value` `SettlementAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `Fee_value` `Fee_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `OrigTxnAmt_value` `OrigTxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `cardfinancial` CHANGE `TxnAmt_value` `TxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `CashbackAmt_value` `CashbackAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `BillAmt_value` `BillAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `MsgSource_value` `MsgSource_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `Fee_value` `Fee_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `SettlementAmt_value` `SettlementAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `OrigTxnAmt_value` `OrigTxnAmt_value` DECIMAL(20,4) NULL DEFAULT NULL, CHANGE `CCAAmount_value` `CCAAmount_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+ALTER TABLE `cardloadunload` CHANGE `Amount_value` `Amount_value` DECIMAL(20,4) NULL DEFAULT NULL;
+
+
+CREATE TABLE IF NOT EXISTS `daily_balance_shift` (
+  `id` varchar(255) NOT NULL DEFAULT '',
+  `repot_date` date NOT NULL,
+  `pan` varchar(255) NOT NULL,
+  `opening_ac_bal` decimal(20,4) DEFAULT NULL,
+  `ATM_Settled` decimal(20,4) DEFAULT NULL,
+  `POS_Settled` decimal(20,4) DEFAULT NULL,
+  `ATM_FEE` decimal(20,4) DEFAULT NULL,
+  `FPIN` decimal(20,4) DEFAULT NULL,
+  `FP_out` decimal(20,4) DEFAULT NULL,
+  `Other_fees` decimal(20,4) DEFAULT NULL,
+  `Load_Unload` decimal(20,4) DEFAULT NULL,
+  `Blocked_Amount` decimal(20,4) DEFAULT NULL,
+  `Offline_Term_Trans` decimal(20,4) DEFAULT NULL,
+  `Balance_Adj` decimal(20,4) DEFAULT NULL,
+  `closing_ac_bal_calc` decimal(20,4) DEFAULT NULL,
+  `closing_ac_bal_gps` decimal(20,4) DEFAULT NULL,
+  `trans_settled_not_adj_gps` decimal(20,4) DEFAULT NULL,
+  `trans_settled_not_adj_gps_2` decimal(20,4) DEFAULT NULL,
+  `diff` decimal(20,4) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `flag` enum('N','Y') NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `daily_balance_shift` ADD `FP_out_fee` DECIMAL(20,4) NULL AFTER `FP_out`;
+
+CREATE TABLE IF NOT EXISTS `daily_balance_shift_temp` (
+  `repot_date` date NOT NULL,
+  `pan` varchar(255) NOT NULL,
+  `opening_ac_bal` decimal(20,4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+// From Milan
+
+ALTER TABLE `direct_debits` ADD `created_at` TIMESTAMP NOT NULL AFTER `Token_Number`, ADD `updated_at` TIMESTAMP NOT NULL AFTER `created_at`;
+ALTER TABLE `direct_debits` ADD `deleted_at` INT NULL AFTER `updated_at`;
+
+ALTER TABLE `rejacted_bacs` ADD `created_at` TIMESTAMP NOT NULL AFTER `RecordType`, ADD `updated_at` TIMESTAMP NOT NULL AFTER `created_at`, ADD `deleted_at` TIMESTAMP NULL DEFAULT NULL AFTER `updated_at`;
+
+
+
+
+// From Maulik (01-10-2018)
+
+ALTER TABLE `agencybanking` ADD FULLTEXT(`External_name`);
+
+// From Maulik (02-10-2018)
+
+ALTER TABLE `fp_out` ADD `ab_type` ENUM('Approved','Declined') NULL AFTER `updated_at`, ADD `agencybanking_Id` VARCHAR(255) NULL AFTER `ab_type`;
+
+ALTER TABLE `agencybanking` CHANGE `reco_flg` `reco_flg` ENUM('N','Y','F','A') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'N';
+
+
+CREATE TABLE IF NOT EXISTS `advice` (
+  `id` varchar(255) NOT NULL,
+  `ab_sort_code` varchar(25) NOT NULL,
+  `ab_account_number` varchar(25) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `ext_bank_sort_code` varchar(25) DEFAULT NULL,
+  `ext_bank_acc_number` varchar(25) NOT NULL,
+  `amount_in_cent` decimal(15,0) DEFAULT NULL,
+  `actual_amount` decimal(20,4) DEFAULT NULL,
+  `ext_name` varchar(255) DEFAULT NULL,
+  `type` enum('abapproved','abdeclined','dd','bacs') DEFAULT NULL,
+  `related_table_id` varchar(255) DEFAULT NULL,
+  `file_date` date NOT NULL,
+  `reco_flg` enum('Y','N') NOT NULL DEFAULT 'N',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `advice`
+  ADD PRIMARY KEY (`id`);
+
+
+// From Maulik (04-10-2018)
+
+ALTER TABLE `agencybanking` ADD `reco_date` DATE NULL AFTER `reco_flg`;
+ALTER TABLE `direct_debits` ADD `reco_date` DATE NULL AFTER `reco_flg`;
+
+// Maulik (22-10-2018)
+
+ALTER TABLE `agencybanking` ADD `fp_out_date` DATE NULL AFTER `reco_date`;
+ALTER TABLE `fp_out` ADD `reco_date` DATE NULL AFTER `reco_flg`;
+
+
+CREATE TABLE IF NOT EXISTS `main_reco_report_daily` (
+  `id` varchar(255) NOT NULL,
+  `report_date` date NOT NULL,
+  `diff_amt` decimal(20,4) NOT NULL,
+  `abd_opening` decimal(20,4) DEFAULT NULL,
+  `abd_fpreceived` decimal(20,4) DEFAULT NULL,
+  `abd_fpreturn` decimal(20,4) DEFAULT NULL,
+  `abd_bounceback` decimal(20,4) DEFAULT NULL,
+  `abd_bacsreceived` decimal(20,4) DEFAULT NULL,
+  `abd_bacsreturn` decimal(20,4) DEFAULT NULL,
+  `abd_closing` decimal(20,4) DEFAULT NULL,
+  `nmtl_fpinopening` decimal(20,4) DEFAULT NULL,
+  `nmtl_fpinreceived` decimal(20,4) DEFAULT NULL,
+  `nmtl_fpinreturn` decimal(20,4) DEFAULT NULL,
+  `nmtl_fpinclosing` decimal(20,4) DEFAULT NULL,
+  `nmtl_bacsopening` decimal(20,4) DEFAULT NULL,
+  `nmtl_bacsreceived` decimal(20,4) DEFAULT NULL,
+  `nmtl_bacsreturn` decimal(20,4) DEFAULT NULL,
+  `nmtl_bacsclosing` decimal(20,4) DEFAULT NULL,
+  `dcaadj_opening` decimal(20,4) DEFAULT NULL,
+  `dcaadj_dcaadj` decimal(20,4) DEFAULT NULL,
+  `dcaadj_adjtocard` decimal(20,4) DEFAULT NULL,
+  `dcaadj_closing` decimal(20,4) DEFAULT NULL,
+  `fprp_opening` decimal(20,4) DEFAULT NULL,
+  `fprp_ppreceived` decimal(20,4) DEFAULT NULL,
+  `fprp_cdpipeline` decimal(20,4) DEFAULT NULL,
+  `fprp_closing` decimal(20,4) DEFAULT NULL,
+  `fpop_opening` decimal(20,4) DEFAULT NULL,
+  `fpop_pppaid` decimal(20,4) DEFAULT NULL,
+  `fpop_cdtrans` decimal(20,4) DEFAULT NULL,
+  `fpop_closing` decimal(20,4) DEFAULT NULL,
+  `umbd_opening` decimal(20,4) DEFAULT NULL,
+  `umbd_curr` decimal(20,4) DEFAULT NULL,
+  `umbd_adj` decimal(20,4) DEFAULT NULL,
+  `umbd_closing` decimal(20,4) DEFAULT NULL,
+  `unmatch_bacs_ddr_current` decimal(20,4) DEFAULT NULL,
+  `unmatch_bacs_ddr_closing` decimal(20,4) DEFAULT NULL,
+  `unauthorized_dd_opening` decimal(20,4) DEFAULT NULL,
+  `unauthorized_dd_current` decimal(20,4) DEFAULT NULL,
+  `unauthorized_dd_recovered` decimal(20,4) DEFAULT NULL,
+  `unauthorized_dd_closing` decimal(20,4) DEFAULT NULL,
+  `dec_dd_not_cr_opening` decimal(20,4) DEFAULT NULL,
+  `dec_dd_not_cr_uncr` decimal(20,4) DEFAULT NULL,
+  `dec_dd_not_cr_returned` decimal(20,4) DEFAULT NULL,
+  `dec_dd_not_cr_closing` decimal(20,4) DEFAULT NULL,
+  `missing_dd_opening` decimal(20,4) DEFAULT NULL,
+  `missing_dd_unknown` decimal(20,4) DEFAULT NULL,
+  `missing_dd_returned` decimal(20,4) DEFAULT NULL,
+  `missing_dd_closing` decimal(20,4) DEFAULT NULL,
+  `balance_adj_opening` decimal(20,4) DEFAULT NULL,
+  `balance_adj_credits` decimal(20,4) DEFAULT NULL,
+  `balance_adj_debits` decimal(20,4) DEFAULT NULL,
+  `balance_adj_closing` decimal(20,4) DEFAULT NULL,
+  `charge_back_opening` decimal(20,4) DEFAULT NULL,
+  `charge_back_credits` decimal(20,4) DEFAULT NULL,
+  `charge_back_debits` decimal(20,4) DEFAULT NULL,
+  `charge_back_closing` decimal(20,4) DEFAULT NULL,
+  `return_to_source_opening` decimal(20,4) DEFAULT NULL,
+  `return_to_source_adj` decimal(20,4) DEFAULT NULL,
+  `return_to_source_fp_out_sent` decimal(20,4) DEFAULT NULL,
+  `return_to_source_closing` decimal(20,4) DEFAULT NULL,
+  `blocked_amt_pos` decimal(20,4) DEFAULT NULL,
+  `blocked_amt_atm` decimal(20,4) DEFAULT NULL,
+  `blocked_amt_ofline_tt` decimal(20,4) DEFAULT NULL,
+  `blocked_amt_fee` decimal(20,4) DEFAULT NULL,
+  `blocked_amt_closing` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_opening` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_dr` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_cb` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_re` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_cr` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_chargeback` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_pos_repres` decimal(20,4) DEFAULT NULL,
+  `pos_interchang_closing` decimal(20,4) DEFAULT NULL,
+  `atm_interchang_opening` decimal(20,4) DEFAULT NULL,
+  `atm_interchang_current` decimal(20,4) DEFAULT NULL,
+  `atm_interchang_closing` decimal(20,4) DEFAULT NULL,
+  `fp_out_fee` decimal(20,4) DEFAULT NULL,
+  `atm_fee` decimal(20,4) DEFAULT NULL,
+  `forex_fee` decimal(20,4) DEFAULT NULL,
+  `card_replace_fee` decimal(20,4) DEFAULT NULL,
+  `code_999999_fee` decimal(20,4) DEFAULT NULL,
+  `closing_fee` decimal(20,4) DEFAULT NULL,
+  `txn_sattled_not_adj_opening` decimal(20,4) DEFAULT NULL,
+  `txn_sattled_not_adj_curr` decimal(20,4) DEFAULT NULL,
+  `txn_sattled_not_adj_prev` decimal(20,4) DEFAULT NULL,
+  `txn_sattled_not_adj_closing` decimal(20,4) DEFAULT NULL,
+  `adj_from_phy_vir_current` decimal(20,4) DEFAULT NULL,
+  `adj_from_phy_vir_closing` decimal(20,4) DEFAULT NULL,
+  `missing_gps_bal_current` decimal(20,4) DEFAULT NULL,
+  `missing_gps_bal_closing` decimal(20,4) DEFAULT NULL,
+  `bank_charges_current` decimal(20,4) DEFAULT NULL,
+  `bank_charges_closing` decimal(20,4) DEFAULT NULL,
+  `interst_current` decimal(20,4) DEFAULT NULL,
+  `interest_closing` decimal(20,4) DEFAULT NULL,
+  `ultra_net` decimal(20,4) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `flag` enum('N','Y') NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `main_reco_report_daily`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `bank_statement` ADD `extra_flags` VARCHAR(255) NULL AFTER `reco_flg`;
+ALTER TABLE `cardbaladjust` ADD `reco_date` DATE NULL AFTER `reco_flg`;
+ALTER TABLE `cardbaladjust` ADD `extra_flags` VARCHAR(255) NULL AFTER `reco_date`;
+ALTER TABLE `main_reco_report_daily` ADD `unmatch_bacs_ddr_adj` DECIMAL(20,4) NULL AFTER `unmatch_bacs_ddr_current`;
+
+
+
+// 26-11-2018 query changes //
+
+ALTER TABLE `manual_selected_data` ADD `user_id` INT(11) NULL AFTER `table_type`;
+
+// 30-11-2018 Query Changes //
+
+ALTER TABLE `bank_balance` CHANGE `finamt` `finamt` DECIMAL(20,6) NULL DEFAULT NULL;
+ALTER TABLE `bank_balance` CHANGE `blkamt` `blkamt` DECIMAL(20,6) NULL DEFAULT NULL;
+ALTER TABLE `bank_balance` CHANGE `amtavl` `amtavl` DECIMAL(20,6) NULL DEFAULT NULL;
+
+
+// 03-12-2018 Query Changes //
+
+ALTER TABLE `main_reco_report_daily` ADD `closing_unclaim_fund` DECIMAL(20,4) NULL AFTER `dcaadj_closing`;
+ALTER TABLE `main_reco_report_daily` ADD `opening_unclaim_fund` DECIMAL(20,4) NULL AFTER `diff_amt`;
+
+ALTER TABLE `cardfinancial` ADD `daily_balance_shift_id` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `cardfee` ADD `daily_balance_shift_id` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `daily_balance_shift` ADD `charge_backs` DECIMAL(20,4) NULL AFTER `FP_out_fee`, ADD `representments` DECIMAL(20,4) NULL AFTER `charge_backs`;
+
+ALTER TABLE `main_reco_report_daily` ADD `dd_closing_total` DECIMAL(20,4) NULL AFTER `missing_dd_closing`;
+
+// 12-12-2018
+
+ALTER TABLE `txn_mapping_int` ADD FULLTEXT(`bank_statement_id`);
+ALTER TABLE `txn_mapping_int` ADD FULLTEXT(`txn_table_id`);
+ALTER TABLE `agencybanking` ADD INDEX(`BankingId`);
+ALTER TABLE `agencybankingfee` ADD INDEX(`BankingFeeId`);
+ALTER TABLE `cardauthorisation` ADD INDEX(`AuthId`);
+ALTER TABLE `cardfee` ADD INDEX(`CardFeeId`);
+ALTER TABLE `cardfinancial` ADD INDEX(`FinId`);
+
+// 14-12-2018
+
+ALTER TABLE `fp_out` ADD `ReportTitle` VARCHAR(255) NULL AFTER `ab_type`, ADD `CorporateID` VARCHAR(255) NULL AFTER `ReportTitle`, ADD `SubmissionID` VARCHAR(255) NULL AFTER `CorporateID`;
+
+// 17-12-2018
+
+ALTER TABLE `bank_balance_card` ADD INDEX(`bank_balance_id`);
+ALTER TABLE `agencybanking` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `advice` ADD `file_name` VARCHAR(255) NULL AFTER `updated_at`;
+ALTER TABLE `agencybankingfee` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `bank_balance` ADD `file_name` VARCHAR(255) NULL AFTER `deleted_at`;
+ALTER TABLE `cardauthorisation` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `cardbaladjust` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `cardchrgbackrepres` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `cardevent` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `cardfee` ADD `file_name` VARCHAR(255) NULL AFTER `daily_balance_shift_id`;
+ALTER TABLE `cardfinancial` ADD `file_name` VARCHAR(255) NULL AFTER `daily_balance_shift_id`;
+ALTER TABLE `cardloadunload` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+ALTER TABLE `fp_out` ADD `file_name` VARCHAR(255) NULL AFTER `SubmissionID`;
+ALTER TABLE `mastercardfee` ADD `file_name` VARCHAR(255) NULL AFTER `file_date`;
+
+ALTER TABLE `daily_balance_shift` ADD `Bacs_IN` DECIMAL(20,4) NULL AFTER `FPIN`;
+ALTER TABLE `daily_balance_shift` ADD `AB_DD` DECIMAL(20,4) NULL AFTER `FP_out`;
+
+ALTER TABLE `bank_balance_card` ADD PRIMARY KEY(`id`);
+ALTER TABLE `bank_balance` ADD INDEX(`bankbal_date`);
+ALTER TABLE `bank_balance_card` ADD INDEX(`pan`);
+ALTER TABLE `cardfinancial` ADD INDEX(`Card_PAN`);
+ALTER TABLE `cardfinancial` ADD INDEX(`TxnCode_ProcCode`);
+ALTER TABLE `cardfinancial` ADD INDEX(`RecordType`);
+ALTER TABLE `cardfinancial` ADD INDEX(`SettlementDate`);
+ALTER TABLE `cardfee` ADD INDEX(`Card_PAN`);
+ALTER TABLE `cardfee` ADD FULLTEXT(`Desc`);
+
+ALTER TABLE `bank_balance` ADD `bank_pan` VARCHAR(255) NULL AFTER `file_name`;
+ALTER TABLE `bank_balance` ADD INDEX(`bank_pan`);
+
+
+// 26-12-2018
+
+ALTER TABLE `fp_out` ADD `FPSDocumentTitle` VARCHAR(255) NULL AFTER `SubmissionID`, ADD `FPSDocumentcreated` VARCHAR(255) NULL AFTER `FPSDocumentTitle`, ADD `FPSDocumentschemaVersion` VARCHAR(255) NULL AFTER `FPSDocumentcreated`, ADD `SubmissionStatus` VARCHAR(255) NULL AFTER `FPSDocumentschemaVersion`, ADD `Currency` VARCHAR(255) NULL AFTER `SubmissionStatus`, ADD `FileStatus` VARCHAR(255) NULL AFTER `Currency`, ADD `OutwardAcceptedVolume` VARCHAR(255) NULL AFTER `FileStatus`, ADD `OutwardAcceptedValue` VARCHAR(255) NULL AFTER `OutwardAcceptedVolume`, ADD `OutwardAcceptedValueCur` VARCHAR(255) NULL AFTER `OutwardAcceptedValue`, ADD `OutwardRejectedVolume` VARCHAR(255) NULL AFTER `OutwardAcceptedValueCur`, ADD `OutwardRejectedValue` VARCHAR(255) NULL AFTER `OutwardRejectedVolume`, ADD `OutwardRejectedValueCur` VARCHAR(255) NULL AFTER `OutwardRejectedValue`, ADD `Time` VARCHAR(255) NULL AFTER `OutwardRejectedValueCur`;
+
+
+// 3-1-2019
+
+ALTER TABLE `advice` ADD `C` VARCHAR(255) NULL AFTER `file_name`, ADD `A` VARCHAR(255) NULL AFTER `C`, ADD `ref` VARCHAR(255) NULL AFTER `A`, ADD `ab_name` VARCHAR(255) NULL AFTER `ref`, ADD `advice_number` VARCHAR(255) NULL AFTER `ab_name`, ADD `Y` VARCHAR(255) NULL AFTER `advice_number`, ADD `Z` VARCHAR(255) NULL AFTER `Y`;
+
+// 21-01-2019
+
+ALTER TABLE `advice` ADD `X` VARCHAR(255) NULL AFTER `advice_number`;
+
+ALTER TABLE `agencybanking` ADD `fpout_dec_reco_flag` ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER `file_name`;
+
+ALTER TABLE `rejacted_bacs` ADD `return_b` VARCHAR(255) NULL AFTER `Txn_Amt`
+
+ALTER TABLE `cardfee` ADD INDEX `SettlementDate` (`SettlementDate`);
+
+ALTER TABLE `agencybanking`
+ADD INDEX `SettlementDate` (`SettlementDate`),
+ADD INDEX `Card_PAN` (`Card_PAN`);
+
+ALTER TABLE `cardbaladjust` ADD `extra_flags_cr_dr` VARCHAR(255) NULL AFTER `extra_flags`;
+
+
+CREATE TABLE `marq_march_live`.`daily_bal_card_financial_int` ( `id` INT(11) NOT NULL AUTO_INCREMENT , `daily_balance_shift_id` VARCHAR(255) NOT NULL , `cardfinancial_id` VARCHAR(255) NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+ALTER TABLE `daily_bal_card_financial_int` ADD `type` ENUM('cardfinancial','cardfee') NOT NULL AFTER `cardfinancial_id`;

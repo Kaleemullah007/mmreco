@@ -1,0 +1,64 @@
+Fields - 
+First name,
+Last name,
+Address1,--
+Address 2,--
+-- CIty,--
+Zip code,
+Trade(/role),
+NWM reference,--
+Contact number,
+NI reference,--
+Company,--
+Uplifts T1,--
+Uplifts T2,--
+Performance Score,--
+Warnings,--
+Blacklist--
+
+
+First Name
+Last Name
+Employeename
+Password
+Confirm Password
+Designation => Trade(/role)
+Email
+Address1
+Address 2
+Employee Role--
+Employee Skill
+Date of Birth
+Notes
+Groups
+Permission
+
+
+//
+//Employee No.
+//Designation--
+//Reporting Manager
+//Location--
+Pin Code--
+Phone--
+//Login Enable
+//CTC Salary
+//Gross Salary
+//New Salary
+//New Gross Salary
+//Salary Change Date
+
+//Department
+
+Gate Pass
+Agreement End Date
+
+Certificates
+
+
+Checkbox for Email this user their credentials? 
+Permission
+
+// table user new filed add
+
+ALTER TABLE `users`  ADD `address` VARCHAR(200) NOT NULL  AFTER `full_name`,  ADD `address2` VARCHAR(200) NOT NULL  AFTER `address`,  ADD `city` VARCHAR(200) NOT NULL  AFTER `address2`,  ADD `nwm_reference` VARCHAR(200) NOT NULL  AFTER `city`,  ADD `ni_reference` VARCHAR(200) NOT NULL  AFTER `nwm_reference`,  ADD `company` VARCHAR(200) NOT NULL  AFTER `ni_reference`,  ADD `uplifts_t1` VARCHAR(200) NOT NULL  AFTER `company`,  ADD `uplifts_t2` VARCHAR(200) NOT NULL  AFTER `uplifts_t1`,  ADD `performance_score` VARCHAR(200) NOT NULL  AFTER `uplifts_t2`,  ADD `warnings` VARCHAR(200) NOT NULL  AFTER `performance_score`,  ADD `blacklist` VARCHAR(200) NOT NULL  AFTER `warnings`;

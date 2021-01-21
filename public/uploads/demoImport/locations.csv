@@ -1,0 +1,3 @@
+name,city,state,address,address2,zip,parent_id,"city type (0=>Metro,1=>NonMetro)"
+ranip,Ahmedabad,Gujarat,demo,,380013,,1
+somnath temple,prabhas patan,veraval,demo,demo,385250,veraval,0

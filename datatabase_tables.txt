@@ -1,0 +1,29 @@
+--- settlement_summary ---
+
+id
+settlement_date
+opening_ac_bal
+scheme_to_settlement_transfer			-	n
+charges 								-	n
+deposits_into_settlement_ac				-	n
+monthly_interest_settlement_ac			-	n
+no_of_pos_txn
+value_of_pos_txn
+value_of_pos_interchange
+total_value_of_pos_txn
+number_of_atm_txn
+value_of_atm_txn
+value_of_atm_interchange
+total_value_of_atm_txn
+total_value_of_txn_settled
+settlement_closing_bal_adj				-	n
+closing_ac_bal
+scheme_closing_bal
+prefund									-	n
+total_bal_available_to_cust_bal
+available_cust_bal_credit
+available_cust_bal_debit
+overall_cash_position
+live_pans
+transactional_fees						-	n
+month

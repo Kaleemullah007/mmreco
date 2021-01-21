@@ -1,0 +1,18 @@
+-	BankStatement Flag
+
+ABDBR		-	AGENCY BANK DECLINED Bacs Return 
+NMTLBR 		-	Not Matched to Loads BACS Return
+UMBNKDCUR	-	Un Matched Bank Debits (TRFS) Current
+UNBDCUR 	-	Unmatched Bacs DDR Current
+DECDDNCRTN 	-	Declined DD Not Credited Yet Returned
+MISSDDRTN 	-	Missing Direct Debits Return
+BNKCHRGCUR 	-	Bank Charges Current
+INTERSTCUR 	-	Intrest Current
+
+-	Balance Adjustment Flag
+
+DCAADJ		-	DCA ADJ Adjusted to card
+UMBNKDADJ	-	Un Matched Bank Debits (TRFS) Adjustments
+UNMBDADJ	-	Unmatched Bacs DDR Adjustments
+UNAUTHDDREC	-	Unpaid Processed Direct Debits Recovered
+

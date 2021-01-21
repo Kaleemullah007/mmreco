@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'repot_date'=>'Repot Date',
+    'pan'=>'PAN',
+    'opening_ac_bal'=>'Opening Bal',
+    'atm_settled'=>'ATM Settled',
+    'pos_settled'=>'POS Settled',
+    'atm_fee'=>'ATM Fee',
+    'fpin'=>'FPIN',
+    'fp_out'=>'FP Out',
+    'fp_out_fee'=>'FP Out Fee',
+    'other_fees'=>'Other Fees',
+    'load_unload'=>'Load Unload',
+    'blocked_amount'=>'Blocked Amount',
+    'offline_term_trans'=>'Offline Term Trans',
+    'balance_adj'=>'Balance Adj',
+    'closing_ac_bal_calc'=>'Closing Bal Calc',
+    'closing_ac_bal_gps'=>'Closing Bal GPS',
+    'Transactions_in_Timing'=>'Trans in Timing',
+    'Transactions_in_Timing2'=>'Trans in Timing',
+    'diff'=>'Diff',
+    'flag'=>'Flag',
+    'created_at'=>'Created At',
+    'report_month'=>'Repot Month',
+);
